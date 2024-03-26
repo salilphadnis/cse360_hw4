@@ -30,12 +30,14 @@ import java.util.Scanner;
 
 public class hw4 extends Application {
 	
+		//This will be incremented before it is used,
+		//so starting patient ID will be 12345 
 		int patientID = 12344;
 
 		public void start(Stage primaryStage) {
 		   
+			//Main Menu shown at startup
 			showMainMenu(primaryStage);
-					   
 	   }
 	   
 		public void showMainMenu(Stage primaryStage)
@@ -58,6 +60,8 @@ public class hw4 extends Application {
 				Button btnTechnician = new Button("CT Scan Tech View");
 				Button btnPatientView = new Button("Patient View");
 				
+				//Event handlers for buttons
+				//Each button will take the user to the relevant form
 				
 				btnPatientIntake.setOnAction(new EventHandler<>() {
 		            public void handle(ActionEvent event) {
@@ -105,16 +109,11 @@ public class hw4 extends Application {
 				column1.setPrefWidth(200);
 				column2.setPrefWidth(300);
 				column3.setPrefWidth(200);
-				
-				// Horizontal alignment
-				//GridPane.setHalignment(lblJoesDeli, HPos.CENTER);
-				//GridPane.setHalignment(lblLastName, HPos.RIGHT);
-				
+								
 				root.setCenter(grid);
 
 				Scene scene = new Scene(root, 900, 600);
 				primaryStage.setScene(scene);
-				//primaryStage.setTitle("");
 				primaryStage.show();
 				
 			} catch (Exception e) {
@@ -123,9 +122,9 @@ public class hw4 extends Application {
 			
 		}
 		
+		//Create Patient Intake form
 		public void showPatientIntakeForm(Stage primaryStage)
 		{
-		   
 			try {
 				BorderPane root = new BorderPane();
 				
@@ -204,6 +203,7 @@ public class hw4 extends Application {
 		            	//Increment Patient ID since this is a new patient
 		            	patientID++;
 		            	
+		            	//Get all the info from the form and write to file
 		            	String fileName = patientID + "_Patientinfo.txt";
 		                File file = new File(fileName);
 		                FileWriter fr = null;
@@ -277,6 +277,7 @@ public class hw4 extends Application {
 		   
 	   }
 		
+		//Create Technician view form
 		public void showTechnicianView(Stage primaryStage)
 		{
 		   
@@ -406,6 +407,7 @@ public class hw4 extends Application {
 		            	lblRCAEmpty.setText("");
 		            	lblPDAEmpty.setText("");
 		            	
+		            	//If any of the form fields are not filled, show error message next to the field
 		            	if (txtPatientID.getText().equals("")) {
 		            		lblPatientIDEmpty.setText("Error: Patient ID cannot be empty!!");
 		            		error = 1;
@@ -442,7 +444,7 @@ public class hw4 extends Application {
 		            	}
 		            	
 		            	if (error == 0) {
-		            		//Check that patient exists
+		            		//Check that patient exists by looking for the patient info file
 		            		String checkPatientID = txtPatientID.getText();
 		            		String checkPatientFile = checkPatientID + "_PatientInfo.txt";
 		            		File file =  new File(checkPatientFile);
@@ -455,7 +457,7 @@ public class hw4 extends Application {
 		            			grid.add(lblError, 2, 0, 1, 1);
 		            		}	
 		            		else {
-		            			//Write to File
+		            			//Write Scan data to File
 			            		String fileName = patientID + "CTResults.txt";
 			            		File file1 = new File(fileName);
 			            		FileWriter fr = null;
@@ -486,7 +488,7 @@ public class hw4 extends Application {
 		            }
 				});
 				
-				//Cancel Button functionality
+				//Cancel Button takes user back to main menu
 				btnCancel.setOnAction(new EventHandler<>() {
 		            public void handle(ActionEvent event) {
 		            	//Go back to main menu
@@ -529,6 +531,7 @@ public class hw4 extends Application {
 			}
 		}
 	   
+		//Create Patient View form
 		public void showPatientView(Stage primaryStage, String name)
 		{
 		   
@@ -605,18 +608,14 @@ public class hw4 extends Application {
 				});
 				
 				
-				//Read patient file and populate the text fields
+				//Read patient CT results file and populate the text fields
         		String fileName = patientID + "CTResults.txt";
 
             	
             	try {
-            		File file = new File(fileName);
 
+            		File file = new File(fileName);
                 	Scanner myReader = new Scanner(file);
-                	/*while (myReader.hasNextLine()) {
-                		String data = myReader.nextLine();
-                		System.out.println(data);
-                	}*/
 
                 	//Read CT results file and fill info in text fields
                 	String data = myReader.nextLine();
@@ -642,9 +641,7 @@ public class hw4 extends Application {
             	      System.out.println("An error occurred.");
             	      e.printStackTrace();
             	}
-				
-
-				
+								
 				// Set Column and Row Gap
 				grid.setHgap(20);
 				grid.setVgap(20);
@@ -667,17 +664,16 @@ public class hw4 extends Application {
 				
 				root.setCenter(grid);
 				
-				
 				Scene scene = new Scene(root, 900, 600);
 				primaryStage.setScene(scene);
-				//primaryStage.setTitle("");
 				primaryStage.show();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-				
+			
+		//Patient Login form
 		public void showPatientLogin(Stage primaryStage)
 		{
 		   
@@ -711,8 +707,7 @@ public class hw4 extends Application {
 				
 				btnLogin.setOnAction(new EventHandler<>() {
 		            public void handle(ActionEvent event) {
-		                //Check whether Patient file exist
-		            	//Check that patient exists
+		                //Check whether Patient info file exist
 		            	String checkPatientID = txtPatientID.getText();
 		            	String checkPatientFile = checkPatientID + "_PatientInfo.txt";
 		            	File file =  new File(checkPatientFile);
@@ -732,6 +727,8 @@ public class hw4 extends Application {
 								myReader = new Scanner(file);
 			            		String name = myReader.nextLine();
 			                	myReader.close();
+			                	
+			                	//Go to Patient View form
 			            		showPatientView(primaryStage, name);
 
 							} catch (FileNotFoundException e) {
@@ -741,6 +738,7 @@ public class hw4 extends Application {
 		            }       
 				});
 				
+				//Cancel button takes user back to Main menu
 				btnCancel.setOnAction(new EventHandler<>() {
 		            public void handle(ActionEvent event) {
 		                //System.out.println(txtFirstName.getText());
@@ -764,16 +762,10 @@ public class hw4 extends Application {
 				column1.setPrefWidth(200);
 				column2.setPrefWidth(300);
 				
-				// Horizontal alignment
-				//GridPane.setHalignment(lblHello, HPos.CENTER);
-				//GridPane.setHalignment(lblLastName, HPos.RIGHT);
-				
 				root.setCenter(grid);
-				
 				
 				Scene scene = new Scene(root, 900, 600);
 				primaryStage.setScene(scene);
-				//primaryStage.setTitle("");
 				primaryStage.show();
 				
 			} catch (Exception e) {
